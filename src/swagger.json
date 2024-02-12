@@ -1,0 +1,424 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+       "version": "1.0.0",
+       "title": "Swagger Autenticação JWT",
+       "description": "API de autenticação desenvolvida com Node.js, Prisma(orm), Mongodb e Jwt.",
+       "termsOfService": "http://swagger.io/terms/",
+       "contact": {
+          "name": "Felipe contato",
+          "email": "felipe.devfull@gmail.com",
+          "url": "https://felipefreela-portfolio.vercel.app/"
+       },
+       "license": {
+          "name": "Apache 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+       }
+    },
+    "servers": [
+       {
+          "url": "http://localhost:3000/v1/user"
+       }
+    ],
+    "paths": {
+       "/register": {
+          "post": {
+             "tags": [
+                "user"
+             ],
+             "summary": "Cadastra um usuário",
+             "description": "Cadastra um usuário",
+             "operationId": "CreateUser",
+             "requestBody": {
+                "description": "Dados necessários para cadastrar um usuário.",
+                "required": true,
+                "content": {
+                   "application/json": {
+                      "schema": {
+                         "$ref": "#/components/schemas/Register"
+                      }
+                   }
+                }
+             },
+             "responses": {
+                "201": {
+                   "description": "Cadastro efetuado com sucesso.",
+                   "content": {
+                      "application/json": {
+                         "schema": {
+                            "$ref": "#/components/schemas/Login"
+                         }
+                      }
+                   }
+                },
+                "400": {
+                  "description": "Esse email já foi cadastrado",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+                },
+                "422": {
+                  "description": "Dados incompletos.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+                },
+                "500": {
+                   "description": "Servidor encontrou um erro. Tente novamente mais tarde.",
+                   "content": {
+                      "application/json": {
+                         "schema": {
+                            "$ref": "#/components/schemas/Error"
+                         }
+                      }
+                   }
+                }
+             }
+          }
+       },
+       "/login": {
+         "post": {
+            "tags": [
+               "user"
+            ],
+            "summary": "Cria o access token e o refresh token",
+            "description": "Rota responsável por gerar o access token e o refresh token",
+            "operationId": "AccessToken_RefreshToken",
+            "requestBody": {
+            "description": "Dados necessários para criar o access token e o refresh token",
+            "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/Login"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "Access token e refresh token criados com sucesso.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/AcessToken_RefreshToken"
+                        }
+                     }
+                  }
+               },
+               "422": {
+                 "description": "Dados incompletos.",
+                 "content": {
+                    "application/json": {
+                       "schema": {
+                          "$ref": "#/components/schemas/Error"
+                       }
+                    }
+                 }
+               },
+               "500": {
+                  "description": "Servidor encontrou um erro. Tente novamente mais tarde.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+       "/profile": {
+          "get": {
+             "tags": [
+                "user"
+             ],
+             "security": [{ "bearerAuth": [] }],
+             "summary": "Retorna os dados do usuário logado.",
+             "description": "Rota responsável por retornar os dados do usuário logado.",
+             "operationId": "ReturnUser",
+             "responses": {
+                "200": {
+                   "description": "Retorna os dados do usuário logado.",
+                   "content": {
+                      "application/json": {
+                         "schema": {
+                            "$ref": "#/components/schemas/Profile"
+                         }
+                      }
+                   }
+                },
+                "401": {
+                  "description": "Token inválido.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+                },
+                "403": {
+                  "description": "Acesso negado.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+                },
+                "422": {
+                  "description": "Dados incompletos.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+                },
+                "500": {
+                   "description": "Servidor encontrou um erro. Tente novamente mais tarde.",
+                   "content": {
+                      "application/json": {
+                         "schema": {
+                            "$ref": "#/components/schemas/Error"
+                         }
+                      }
+                   }
+                }
+             }
+          }
+      },
+      "/refreshtoken": {
+         "post": {
+            "tags": [
+               "user"
+            ],
+            "summary": "Cria os novos access token e refresh token.",
+            "description": "Rota responsável por criar o access token e o refresh Token",
+            "operationId": "UserRefreshtoken",
+            "requestBody": {
+               "description": "Dados necessários para criar os novos access token e refresh token.",
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/RefreshToken"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "Retorna o Access token e o Refresh Token",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/AcessToken_RefreshToken"
+                        }
+                     }
+                  }
+               },
+               "401": {
+                  "description": "Refresh token inválido.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+                },
+                "403": {
+                  "description": "Acesso negado.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/AcessToken_RefreshToken"
+                        }
+                     }
+                  }
+               },
+               "422": {
+                 "description": "Dados incompletos.",
+                 "content": {
+                    "application/json": {
+                       "schema": {
+                          "$ref": "#/components/schemas/Error"
+                       }
+                    }
+                 }
+               },
+               "500": {
+                  "description": "Servidor encontrou um erro. Tente novamente mais tarde.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/logout": {
+         "post": {
+            "tags": [
+               "user"
+            ],
+            "summary": "Desconecta o usuário do sistema.",
+            "description": "Rota responsável por desconectar o usuário do sistema.",
+            "operationId": "UserLogout",
+            "requestBody": {
+               "description": "Dado necessário para desconectar o usuário do sistema.",
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/RefreshToken"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                 "description": "Logout.",
+                 "content": {
+                    "application/json": {
+                       "schema": {
+                          "$ref": "#/components/schemas/Error"
+                       }
+                    }
+                 }
+               },
+               "401": {
+                  "description": "Refresh Token inválido.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+                },
+                "422": {
+                  "description": "Dados incompletos.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+                },
+               "500": {
+                  "description": "Servidor encontrou um erro. Tente novamente mais tarde.",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/Error"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+    },
+    "components": {
+       "schemas": {
+         "Register": {
+            "type": "object",
+            "required": [
+              "name", "email", "password", "confirm_password"
+            ],
+            "properties": {
+               "name": {
+                  "type": "string"
+               },
+               "email": {
+                  "type": "string"
+               },
+               "password": {
+                  "type": "string"
+               },
+               "confirm_password": {
+                  "type": "string"
+               }
+            }   
+         },
+         "AcessToken_RefreshToken": {
+         "type": "object",
+         "properties": {
+               "token": {
+                  "type": "string"
+               },
+               "refreshtoken": {
+                  "type": "string"
+               }
+            }   
+         },
+         "RefreshToken": {
+            "type": "object",
+            "properties": {
+               "refreshtoken": {
+                  "type": "string"
+               }
+            }  
+         },
+         "Login": {
+         "type": "object",
+         "required": [
+            "email", "password"
+         ],
+         "properties": {
+            "email": {
+               "type": "string"
+            },
+            "password": {
+               "type": "string"
+            }
+         }   
+         },
+         "Profile": {
+            "type": "object",
+            "properties": {
+               "name": {
+                  "type": "string"
+               },
+               "email": {
+                  "type": "string"
+               }
+            }   
+         },
+         "Error": {
+            "type": "object",
+            "properties": {
+               "message": {
+                  "type": "string"
+               }
+           }
+         }
+
+      },
+      "securitySchemes":{
+         "bearerAuth":{
+           "type":"http",
+           "scheme":"bearer",
+           "bearerFormat": "JWT"
+         }
+      }
+   }
+}
