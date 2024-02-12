@@ -22,4 +22,12 @@ Routes.post("/v1/user/logout", (req: Request, res: Response) => LogoutFactory().
 //swagger
 Routes.use('/v1/user/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
+//Redocly
+Routes.get('/v1/user/api-docs',(req: Request, res: Response) => {
+  return res.sendFile(process.cwd() + '\\'+'src'+'\\'+'swagger.json')
+})
+Routes.get('/v1/user/docs',(req: Request, res: Response) => {
+  return res.sendFile(process.cwd() + '\\'+'src'+'\\'+'index.html')
+})
+
 export default Routes;
