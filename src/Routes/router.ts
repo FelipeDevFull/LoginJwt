@@ -26,7 +26,7 @@ Routes.use('/v1/user/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument)
 Routes.get('/v1/user/api-docs',(req: Request, res: Response) => {
   return res.sendFile(process.cwd() + '\\'+'src'+'\\'+'swagger.json')
 })
-Routes.get('/v1/user/docs',(req: Request, res: Response) => {
+Routes.get('/v1/user/redocly',(req: Request, res: Response) => {
   return res.sendFile(process.cwd() + '\\'+'src'+'\\'+'index.html')
 })
 
